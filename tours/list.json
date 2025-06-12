@@ -1,0 +1,16 @@
+[
+  {
+    "slug": "lisbon",
+    "thumbnail": "thumbnails/lisbon.jpg",
+    "title": {
+      "en": "Lisbon Historic Walk",
+      "es": "Caminata Histórica por Lisboa",
+      "pt": "Caminhada Histórica por Lisboa"
+    },
+    "short": {
+      "en": "Explore Lisbon’s charming Alfama district.",
+      "es": "Explora el encantador barrio de Alfama en Lisboa.",
+      "pt": "Explore o charmoso bairro da Alfama em Lisboa."
+    }
+  }
+]

@@ -1,0 +1,28 @@
+<!-- booking/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Your Tour</title>
+  <style>
+    body { font-family: sans-serif; margin: 2rem; background: #f9f9f9; }
+    h1 { color: #2c3e50; }
+    iframe { border: 0; width: 100%; height: 600px; margin-bottom: 2rem; }
+    select { padding: 0.5rem; font-size: 1rem; }
+  </style>
+</head>
+<body>
+  <h1>Select a Date and Time</h1>
+
+  <!-- Google Calendar embedded -->
+  <iframe src="https://calendar.google.com/calendar/embed?src=seu_calendar_id" frameborder="0" scrolling="no"></iframe>
+
+  <h2>Select Start Time:</h2>
+  <select>
+    <option>10:00</option>
+    <option>14:00</option>
+    <option>17:00</option>
+  </select>
+</body>
+</html>

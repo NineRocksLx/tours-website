@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tour Details - Amazing Tours</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        /* Language Selector */
+        .language-selector {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 10px 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .language-selector select {
+            border: none;
+            background: transparent;
+            font-size: 14px;
+            cursor: pointer;
+            outline: none;
+        }
+
+        /* Back Button */
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 50px;
+            padding: 15px 20px;
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 1);
+            transform: translateY(-2px);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 100px 2rem 2rem;
+        }
+
+        /* Tour Header */
+        .tour-header {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .tour-title {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .tour-subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .tour-price-header {
+            font-size: 2rem;
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        /* Photo Gallery */
+        .photo-gallery {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .gallery-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #2c3e50;
+            text-align: center;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .gallery-item {
+            border-radius: 15px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            height: 250px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+        }
+
+        .gallery-item::after {
+            content: '🔍';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2rem;
+            color: white;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .gallery-item:hover::after {
+            opacity: 1;
+        }
+
+        /* Tour Info */
+        .tour-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .info-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .info-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .info-title {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+            font-size: 1.1rem;
+        }
+
+        .info-text {
+            color: #666;
+        }
+
+        /* Tour Description */
+        .tour-description {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .description-title {
+            font-size: 1.8rem;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+        }
+
+        .description-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #555;
+            text-align: justify;
+        }
+
+        /* Booking Section */
+        .booking-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .booking-title {
+            font-size: 1.8rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .final-price {
+            font-size: 2.5rem;
+            color: #e74c3c;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+        }
+
+        .book-button {
+            background: linear-gradient(45deg, #e74c3c, #f39c12);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.3);
+        }
+
+        .book-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(231, 76, 60, 0.4);
+        }
+
+        /* Modal for Gallery */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+
+        .modal-content {
+            margin: auto;
+            display: block;
+            width: 80%;
+            max-width: 700px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 10px;
+        }
+
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 2001;
+        }
+
+        .close:hover {
+            color: #bbb;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 80px 1rem 1rem;
+            }
+
+            .tour-title {
+                font-size: 2rem;
+            }
+
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .back-button {
+                left: 10px;
+                top: 10px;
+                padding: 12px 16px;
+            }
+
+            .language-selector {
+                right: 10px;
+                top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Language Selector -->
+    <div class="language-selector">
+        <select id="languageSelect" onchange="changeLanguage()">
+            <option value="en">🇺🇸 English</option>
+            <option value="es">🇪🇸 Español</option>
+            <option value="pt">🇵🇹 Português</option>
+        </select>
+    </div>
+
+    <!-- Back Button -->
+    <a href="../index.html" class="back-button" data-translate="back_to_tours">← Back to Tours</a>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Tour Header -->
+        <div class="tour-header">
+            <h1 class="tour-title" id="tourTitle">Lisbon Historic Walk</h1>
+            <p class="tour-subtitle" id="tourSubtitle">Discover the authentic soul of Lisbon</p>
+            <div class="tour-price-header" id="tourPriceHeader">€35</div>
+        </div>
+
+        <!-- Photo Gallery -->
+        <div class="photo-gallery">
+            <h2 class="gallery-title" data-translate="photo_gallery">Photo Gallery</h2>
+            <div class="gallery-grid" id="photoGallery">
+                <div class="gallery-item" style="background-image: url('https://images.unsplash.com/photo-1555881400-74d7acaacd8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')" onclick="openModal(this)"></div>
+                <div class="gallery-item" style="background-image: url('https://images.unsplash.com/photo-1588640808642-17b908f8697c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')" onclick="openModal(this)"></div>
+                <div class="gallery-item" style="background-image: url('https://images.unsplash.com/photo-1526224538687-57c642b90ddf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')" onclick="openModal(this)"></div>
+                <div class="gallery-item" style="background-image: url('https://images.unsplash.com/photo-1585208798174-6cedd86e019a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')" onclick="openModal(this)"></div>
+                <div class="gallery-item" style="background-image: url('https://images.unsplash.com/photo-1502175353174-a7a70e73b362?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')" onclick="openModal(this)"></div>
+                <div class="gallery-item" style="background-image: url('https://images.unsplash.com/photo-1509391366360-2e959784a276?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')" onclick="openModal(this)"></div>
+            </div>
+        </div>
+
+        <!-- Tour Info -->
+        <div class="tour-info">
+            <div class="info-card">
+                <div class="info-icon">⏱️</div>
+                <div class="info-title" data-translate="duration">Duration</div>
+                <div class="info-text" id="tourDuration">3 hours</div>
+            </div>
+            <div class="info-card">
+                <div class="info-icon">👥</div>
+                <div class="info-title" data-translate="group_size">Group Size</div>
+                <div class="info-text" id="groupSize">Max 12 people</div>
+            </div>
+            <div class="info-card">
+                <div class="info-icon">🗣️</div>
+                <div class="info-title" data-translate="languages">Languages</div>
+                <div class="info-text" id="tourLanguages">EN, ES, PT</div>
+            </div>
+            <div class="info-card">
+                <div class="info-icon">📍</div>
+                <div class="info-title" data-translate="meeting_point">Meeting Point</div>
+                <div class="info-text" id="meetingPoint">Rossio Square</div>
+            </div>
+        </div>
+
+        <!-- Tour Description -->
+        <div class="tour-description">
+            <h2 class="description-title" data-translate="description">Tour Description</h2>
+            <div class="description-text" id="tourDescription">
+                Embark on an unforgettable journey through Lisbon's most historic neighborhood, Alfama. This walking tour will take you through narrow cobblestone streets, past colorful houses adorned with traditional Portuguese tiles, and up to breathtaking viewpoints that offer panoramic views of the city and the Tagus River.
+
+                During our 3-hour exploration, you'll discover the authentic soul of Lisbon as we visit traditional Fado houses where Portugal's national music was born. Learn about the fascinating history of this UNESCO World Heritage music genre and perhaps catch a glimpse of spontaneous performances by local musicians.
+
+                We'll explore the magnificent Lisbon Cathedral, one of the city's oldest and most important religious buildings, and wander through the maze-like streets that have remained virtually unchanged for centuries. You'll hear stories of Moorish occupation, medieval times, and the golden age of Portuguese discoveries.
+
+                The tour includes visits to several miradouros (viewpoints) including Miradouro da Senhora do Monte and Miradouro das Portas do Sol, where you'll capture Instagram-worthy photos and truly appreciate why Lisbon is called the city of seven hills.
+
+                This intimate small-group experience (maximum 12 people) ensures personal attention from your knowledgeable local guide, who will share insider tips about the best local restaurants, hidden gems, and cultural insights that you won't find in guidebooks.
+            </div>
+        </div>
+
+        <!-- Booking Section -->
+        <div class="booking-section">
+            <h2 class="booking-title" data-translate="book_this_tour">Book This Amazing Tour</h2>
+            <div class="final-price" id="finalPrice">€35</div>
+            <a href="../booking/index.html" class="book-button" id="bookButton" data-translate="book_now">Book Now</a>
+        </div>
+    </div>
+
+    <!-- Modal for Gallery -->
+    <div id="imageModal" class="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
+
+    <script>
+        // Translation data
+        const translations = {
+            en: {
+                back_to_tours: "← Back to Tours",
+                photo_gallery: "Photo Gallery",
+                duration: "Duration",
+                group_size: "Group Size",
+                languages: "Languages", 
+                meeting_point: "Meeting Point",
+                description: "Tour Description",
+                book_this_tour: "Book This Amazing Tour",
+                book_now: "Book Now"
+            },
+            es: {
+                back_to_tours: "← Volver a Tours",
+                photo_gallery: "Galería de Fotos",
+                duration: "Duración",
+                group_size: "Tamaño del Grupo",
+                languages: "Idiomas",
+                meeting_point: "Punto de Encuentro", 
+                description: "Descripción del Tour",
+                book_this_tour: "Reserva Este Tour Increíble",
+                book_now: "Reservar Ahora"
+            },
+            pt: {
+                back_to_tours: "← Voltar aos Tours",
+                photo_gallery: "Galeria de Fotos",
+                duration: "Duração",
+                group_size: "Tamanho do Grupo",
+                languages: "Idiomas",
+                meeting_point: "Ponto de Encontro",
+                description: "Descrição do Tour", 
+                book_this_tour: "Reserve Este Tour Incrível",
+                book_now: "Reservar Agora"
+            }
+        };
+
+        const tourData = {
+            en: {
+                title: "Lisbon Historic Walk",
+                subtitle: "Discover the authentic soul of Lisbon",
+                price: "€35",
+                duration: "3 hours",
+                groupSize: "Max 12 people",
+                languages: "EN, ES, PT",
+                meetingPoint: "Rossio Square",
+                description: `Embark on an unforgettable journey through Lisbon's most historic neighborhood, Alfama. This walking tour will take you through narrow cobblestone streets, past colorful houses adorned with traditional Portuguese tiles, and up to breathtaking viewpoints that offer panoramic views of the city and the Tagus River.
+
+During our 3-hour exploration, you'll discover the authentic soul of Lisbon as we visit traditional Fado houses where Portugal's national music was born. Learn about the fascinating history of this UNESCO World Heritage music genre and perhaps catch a glimpse of spontaneous performances by local musicians.
+
+We'll explore the magnificent Lisbon Cathedral, one of the city's oldest and most important religious buildings, and wander through the maze-like streets that have remained virtually unchanged for centuries. You'll hear stories of Moorish occupation, medieval times, and the golden age of Portuguese discoveries.
+
+The tour includes visits to several miradouros (viewpoints) including Miradouro da Senhora do Monte and Miradouro das Portas do Sol, where you'll capture Instagram-worthy photos and truly appreciate why Lisbon is called the city of seven hills.
+
+This intimate small-group experience (maximum 12 people) ensures personal attention from your knowledgeable local guide, who will share insider tips about the best local restaurants, hidden gems, and cultural insights that you won't find in guidebooks.`
+            },
+            es: {
+                title: "Caminata Histórica por Lisboa",
+                subtitle: "Descubre el alma auténtica de Lisboa",
+                price: "€35",
+                duration: "3 horas",
+                groupSize: "Máx 12 personas",
+                languages: "EN, ES, PT",
+                meetingPoint: "Plaza Rossio",
+                description: `Embárquese en un viaje inolvidable por el barrio más histórico de Lisboa, Alfama. Este tour a pie lo llevará por estrechas calles empedradas, casas coloridas adornadas con azulejos portugueses tradicionales, y hasta miradores impresionantes que ofrecen vistas panorámicas de la ciudad y el río Tajo.
+
+Durante nuestra exploración de 3 horas, descubrirá el alma auténtica de Lisboa mientras visitamos casas tradicionales de Fado donde nació la música nacional de Portugal. Aprenda sobre la fascinante historia de este género musical Patrimonio de la Humanidad por la UNESCO y quizás vislumbre actuaciones espontáneas de músicos locales.
+
+Exploraremos la magnífica Catedral de Lisboa, uno de los edificios religiosos más antiguos e importantes de la ciudad, y pasearemos por las calles serpenteantes que han permanecido prácticamente sin cambios durante siglos. Escuchará historias de la ocupación mora, tiempos medievales y la era dorada de los descubrimientos portugueses.
+
+El tour incluye visitas a varios miradouros (miradores) incluyendo el Miradouro da Senhora do Monte y el Miradouro das Portas do Sol, donde capturará fotos dignas de Instagram y realmente apreciará por qué Lisboa se llama la ciudad de las siete colinas.
+
+Esta experiencia íntima en grupos pequeños (máximo 12 personas) asegura atención personal de su guía local conocedor, quien compartirá consejos privilegiados sobre los mejores restaurantes locales, gemas ocultas y conocimientos culturales que no encontrará en las guías turísticas.`
+            },
+            pt: {
+                title: "Caminhada Histórica por Lisboa",
+                subtitle: "Descubra a alma autêntica de Lisboa",
+                price: "€35",
+                duration: "3 horas",
+                groupSize: "Máx 12 pessoas",
+                languages: "EN, ES, PT",
+                meetingPoint: "Praça do Rossio",
+                description: `Embarque numa jornada inesquecível pelo bairro mais histórico de Lisboa, Alfama. Este tour a pé levá-lo-á por ruas estreitas de calçada portuguesa, casas coloridas adornadas com azulejos tradicionais portugueses, e até miradouros deslumbrantes que oferecem vistas panorâmicas da cidade e do rio Tejo.
+
+Durante a nossa exploração de 3 horas, descobrirá a alma autêntica de Lisboa enquanto visitamos casas tradicionais de Fado onde nasceu a música nacional de Portugal. Aprenda sobre a fascinante história deste género musical Património Mundial da UNESCO e talvez vislumbre actuações espontâneas de músicos locais.
+
+Exploraremos a magnífica Sé de Lisboa, um dos edifícios religiosos mais antigos e importantes da cidade, e passearemos pelas ruas labirínticas que permaneceram praticamente inalteradas durante séculos. Ouvirá histórias da ocupação moura, tempos medievais e a era dourada dos descobrimentos portugueses.
+
+O tour inclui visitas a vários miradouros incluindo o Miradouro da Senhora do Monte e o Miradouro das Portas do Sol, onde capturará fotos dignas do Instagram e verdadeiramente apreciará porque Lisboa é chamada a cidade das sete colinas.
+
+Esta experiência íntima em grupos pequenos (máximo 12 pessoas) garante atenção pessoal do seu guia local conhecedor, que partilhará dicas privilegiadas sobre os melhores restaurantes locais, jóias escondidas e conhecimentos culturais que não encontrará nos guias turísticos.`
+            }
+        };
+
+        let currentLanguage = 'en';
+
+        // Initialize the page
+        function init() {
+            // Get language from URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const langParam = urlParams.get('lang');
+            if (langParam && translations[langParam]) {
+                currentLanguage = langParam;
+                document.getElementById('languageSelect').value = currentLanguage;
+            }
+            
+            updateContent();
+            updateLanguage();
+        }
+
+        // Update content based on current language
+        function updateContent() {
+            const data = tourData[currentLanguage];
+            
+            document.getElementById('tourTitle').textContent = data.title;
+            document.getElementById('tourSubtitle').textContent = data.subtitle;
+            document.getElementById('tourPriceHeader').textContent = data.price;
+            document.getElementById('tourDuration').textContent = data.duration;
+            document.getElementById('groupSize').textContent = data.groupSize;
+            document.getElementById('tourLanguages').textContent = data.languages;
+            document.getElementById('meetingPoint').textContent = data.meetingPoint;
+            document.getElementById('tourDescription').textContent = data.description;
+            document.getElementById('finalPrice').textContent = data.price;
+            
+            // Update page title
+            document.title = `${data.title} - Amazing Tours`;
+        }
+
+        // Change language
+        function changeLanguage() {
+            const select = document.getElementById('languageSelect');
+            currentLanguage = select.value;
+            updateLanguage();
+            updateContent();
+        }
+
+        // Update language text
+        function updateLanguage() {
+            const elements = document.querySelectorAll('[data-translate]');
+            elements.forEach(element => {
+                const key = element.getAttribute('data-translate');
+                if (translations[currentLanguage][key]) {
+                    element.textContent = translations[currentLanguage][key];
+                }
+            });
+        }
+
+        // Modal functions
+        function openModal(element) {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            const bgImage = element.style.backgroundImage;
+            const imageUrl = bgImage.slice(5, -2); // Remove 'url("' and '")'
+            
+            modal.style.display = 'block';
+            modalImg.src = imageUrl;
+        }
+
+        function closeModal() {
+            document.getElementById('imageModal').style.display = 'none';
+        }
+
+        // Close modal when clicking outside the image
+        window.onclick = function(event) {
+            const modal = document.getElementById('imageModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
