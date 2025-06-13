@@ -1,3 +1,5 @@
+// firebase-config.js
+
 const firebaseConfig = {
   apiKey: "AIzaSyD80GYkjPKfIbVW747zb3s7jXSuVfBJTe4",
   authDomain: "tours-81516-acfbc.firebaseapp.com",
