@@ -8,7 +8,32 @@
 <body>
   <h1>Book Your Tour</h1>
 
-  <!-- Formulário e conteúdo da página -->
+  <form id="bookingForm">
+    <label for="name">Your Name:</label>
+    <input type="text" id="name" required>
+
+    <label for="email">Your Email:</label>
+    <input type="email" id="email" required>
+
+    <label for="tour">Select Tour:</label>
+    <select id="tour" required>
+      <option value="Lisbon City Tour">Lisbon City Tour</option>
+      <option value="Sintra & Cascais">Sintra & Cascais</option>
+      <option value="Fátima Tour">Fátima Tour</option>
+    </select>
+
+    <label for="date">Preferred Date:</label>
+    <input type="date" id="date" required>
+
+    <label for="time">Preferred Time:</label>
+    <select id="time" required>
+      <option value="10:00">10:00</option>
+      <option value="14:00">14:00</option>
+      <option value="17:00">17:00</option>
+    </select>
+
+    <button type="submit">Reserve</button>
+  </form>
 
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
@@ -25,9 +50,28 @@
 
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
-  </script>
 
-  <!-- O teu script principal para lógica do formulário -->
-  <script src="../js/booking-logic.js"></script>
+    document.getElementById('bookingForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const tour = document.getElementById('tour').value;
+      const date = document.getElementById('date').value;
+      const time = document.getElementById('time').value;
+
+      const data = { name, email, tour, date, time, timestamp: new Date() };
+      console.log('[Dados prontos]', data);
+
+      try {
+        await db.collection('reservas').add(data);
+        console.log('[Sucesso] Reserva registrada no Firestore');
+        alert('Reserva registrada com sucesso!');
+        document.getElementById('bookingForm').reset();
+      } catch (err) {
+        console.error('[Erro]', err.message);
+        alert('Erro ao registrar reserva: ' + err.message);
+      }
+    });
+  </script>
 </body>
 </html>
