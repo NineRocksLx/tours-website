@@ -96,11 +96,12 @@
         const duplicate = await db.collection('reservas')
           .where('email', '==', email)
           .where('date', '==', date)
+          .where('time', '==', time)
           .get();
 
         if (!duplicate.empty) {
-          log('[Erro] Reserva já existente para este email e data.');
-          alert('Já existe uma reserva com este email e data.');
+          log('[Erro] Reserva já existente para este email, data e hora.');
+          alert('Já existe uma reserva com este email, data e hora.');
           return;
         }
 
