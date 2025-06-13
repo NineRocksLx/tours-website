@@ -7,10 +7,11 @@
   <style>
     body { font-family: sans-serif; margin: 2rem; background: #f9f9f9; }
     h1 { color: #2c3e50; }
-    iframe { border: 0; width: 100%; height: 600px; margin-bottom: 2rem; }
+    iframe { border: 0; width: 100%; height: 400px; margin-bottom: 2rem; }
     label { display: block; margin-top: 1rem; }
     input, select, button { padding: 0.5rem; font-size: 1rem; margin-top: 0.3rem; width: 100%; max-width: 400px; }
     form { margin-top: 2rem; background: #fff; padding: 2rem; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.05); }
+    #log { margin-top: 2rem; padding: 1rem; background: #eee; font-family: monospace; white-space: pre-wrap; border-radius: 4px; border: 1px solid #ccc; }
   </style>
 </head>
 <body>
@@ -46,30 +47,51 @@
     <button type="submit">Reserve</button>
   </form>
 
+  <div id="log">[Log de depuração]</div>
+
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
   <script src="../js/firebase-config.js"></script>
   <script>
+    const log = (msg) => {
+      const logDiv = document.getElementById('log');
+      logDiv.textContent += '\n' + msg;
+      console.log(msg);
+    };
+
+    window.onload = () => log('[Página carregada]');
+
     const form = document.getElementById('bookingForm');
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
+      log('[Formulário submetido]');
+
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const tour = document.getElementById('tour').value;
+      const date = document.getElementById('date').value;
+      const time = document.getElementById('time').value;
 
       const data = {
-        name: document.getElementById('name').value,
-        email: document.getElementById('email').value,
-        tour: document.getElementById('tour').value,
-        date: document.getElementById('date').value,
-        time: document.getElementById('time').value,
+        name,
+        email,
+        tour,
+        date,
+        time,
         timestamp: new Date()
       };
 
+      log('[Dados prontos] ' + JSON.stringify(data));
+
       try {
-        if (!db) throw new Error('Objeto db não definido');
+        if (!db) throw new Error('Firestore db não definido');
         await db.collection('reservas').add(data);
-        alert('Reserva enviada com sucesso!');
+        log('[Sucesso] Reserva registrada no Firestore');
+        alert('Reserva registrada com sucesso!');
         form.reset();
-      } catch (error) {
-        alert('Erro ao enviar reserva: ' + error.message);
+      } catch (err) {
+        log('[Erro] ' + err.message);
+        alert('Erro ao registrar reserva. Veja log abaixo.');
       }
     });
   </script>
