@@ -1,12 +1,13 @@
 // js/firebase-config.js (versão real com seus dados)
 
 const firebaseConfig = {
-  apiKey: "SUA_API_KEY", // Substitua pela chave exibida no painel
-  authDomain: "tours-81516.firebaseapp.com",
-  projectId: "tours-81516",
-  storageBucket: "tours-81516.appspot.com",
-  messagingSenderId: "609906018450",
-  appId: "SEU_APP_ID" // Substitua pelo valor real
+  apiKey: "AIzaSyD80GYkjPKfIbVW747zb3s7jXSuVfBJTe4",
+  authDomain: "tours-81516-acfbc.firebaseapp.com",
+  projectId: "tours-81516-acfbc",
+  storageBucket: "tours-81516-acfbc.appspot.com",
+  messagingSenderId: "742946187892",
+  appId: "1:742946187892:web:2b0d2bcb974d4564327f21",
+  measurementId: "G-36FC6SS4WD"
 };
 
 firebase.initializeApp(firebaseConfig);
