@@ -7,7 +7,7 @@
   <style>
     body { font-family: sans-serif; margin: 2rem; background: #f9f9f9; }
     h1 { color: #2c3e50; }
-    iframe { border: 0; width: 100%; height: 250px; margin-bottom: 2rem; }
+    iframe { border: 0; width: 100%; height: 450px; margin-bottom: 2rem; }
     label { display: block; margin-top: 1rem; }
     input, select, button { padding: 0.5rem; font-size: 1rem; margin-top: 0.3rem; width: 100%; max-width: 400px; }
     form { margin-top: 2rem; background: #fff; padding: 2rem; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.05); }
@@ -17,8 +17,8 @@
 <body>
   <h1>Select a Date and Time</h1>
 
-  <!-- Google Calendar embedded (use mode=AGENDA for compact view) -->
-  <iframe src="<iframe src="https://calendar.google.com/calendar/embed?src=58ab378ee1abae507e3c1cebde47668c5f2b217d5ab484360b4a02b7d7757161%40group.calendar.google.com&ctz=Europe%2FLisbon" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>&mode=AGENDA" frameborder="0" scrolling="no"></iframe>
+  <!-- Google Calendar embedded (modo mensal e início no dia atual) -->
+  <iframe src="https://calendar.google.com/calendar/embed?src=58ab378ee1abae507e3c1cebde47668c5f2b217d5ab484360b4a02b7d7757161@group.calendar.google.com&mode=MONTH&showTitle=0&showTabs=0&showPrint=0&showCalendars=0&wkst=2&bgcolor=%23ffffff&ctz=Europe%2FLisbon" frameborder="0" scrolling="no"></iframe>
 
   <form id="bookingForm">
     <label for="name">Your Name:</label>
@@ -61,10 +61,14 @@
 
     window.onload = () => {
       log('[Página carregada]');
-      // Bloquear datas anteriores
+      // Bloquear datas anteriores e limitar a 6 meses
       const dateInput = document.getElementById('date');
-      const today = new Date().toISOString().split('T')[0];
-      dateInput.setAttribute('min', today);
+      const today = new Date();
+      const maxDate = new Date();
+      maxDate.setMonth(maxDate.getMonth() + 6);
+
+      dateInput.setAttribute('min', today.toISOString().split('T')[0]);
+      dateInput.setAttribute('max', maxDate.toISOString().split('T')[0]);
     };
 
     const form = document.getElementById('bookingForm');
